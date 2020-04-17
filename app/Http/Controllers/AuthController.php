@@ -27,7 +27,7 @@ class AuthController extends Controller
 
 		if(Auth::attempt($user_data))
 		{
-			return redirect('main/successlogin');
+			return redirect('mainchat');
 		}
 		else
 		{
@@ -44,7 +44,7 @@ class AuthController extends Controller
 	function logout()
 	{
 		Auth::logout();
-		return redirect('main');
+		return redirect('mainchat');
 	}
 }
 

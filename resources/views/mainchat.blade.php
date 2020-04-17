@@ -33,6 +33,14 @@
 		<div class="row">
 			<div class="col-3">
 				@if(isset(Auth::user()->email))
+				<div class="table-responsive">
+					<table class="table borderless">
+						<tr>
+							<th>User:</th>
+							<td>{{Auth::user()->name}}</td>
+						</tr>
+					</table>
+				</div>
 				<h4 id="user_id">User: {{Auth::user()->name}}</h4>
 				<h4 id="user_email">Email: {{Auth::user()->email}}</h4>
 				<h4 id="user_currency_default">Default Currency: CLP</h4>
@@ -84,12 +92,21 @@
 					<script>
 						command = function(aut){
 							var msg = $('#textchat').val();
-							switch(msg) {
-								case "/Command Login":
-								alert(aut);
+							switch(msg.toLowerCase()) {
+								case "/login":
+								alert("login");
 								break;
-								case "/Command Logout":
-								alert("Logout");
+								case "/logout":
+								alert("logout");
+								break;
+								case "/deposit":
+								alert("deposit");
+								break;
+								case "/withdraw":
+								alert("withdraw");
+								break;
+								case "balance":
+								alert("balance");
 								break;
 								default:
 								break;
