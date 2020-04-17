@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/main', 'AuthController@index');
+Route::post('/main/checklogin', 'AuthController@checklogin');
+Route::get('main/successlogin', 'AuthController@successlogin');
+Route::get('main/logout', 'AuthController@logout');
