@@ -17,8 +17,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/*Login*/
 
 Route::get('/main', 'AuthController@index');
 Route::post('/main/checklogin', 'AuthController@checklogin');
 Route::get('main/successlogin', 'AuthController@successlogin');
 Route::get('main/logout', 'AuthController@logout');
+
+/* Chat */
+Route::get('/mainchat', 'ChatController@index');

@@ -8,44 +8,44 @@ use Auth;
 
 class AuthController extends Controller
 {
-  function index()
-    {
-     return view('login');
-    }
+	function index()
+	{
+		return view('login');
+	}
 
-    function checklogin(Request $request)
-    {
-     $this->validate($request, [
-      'email'   => 'required|email',
-      'password'  => 'required|alphaNum|min:3'
-     ]);
+	function checklogin(Request $request)
+	{
+		$this->validate($request, [
+			'email'   => 'required|email',
+			'password'  => 'required|alphaNum|min:3'
+		]);
 
-     $user_data = array(
-      'email'  => $request->get('email'),
-      'password' => $request->get('password')
-     );
+		$user_data = array(
+			'email'  => $request->get('email'),
+			'password' => $request->get('password')
+		);
 
-     if(Auth::attempt($user_data))
-     {
-      return redirect('main/successlogin');
-     }
-     else
-     {
-      return back()->with('error', 'Wrong Login Details');
-     }
+		if(Auth::attempt($user_data))
+		{
+			return redirect('main/successlogin');
+		}
+		else
+		{
+			return back()->with('error', 'Wrong Login Details');
+		}
 
-    }
+	}
 
-    function successlogin()
-    {
-     return view('successlogin');
-    }
+	function successlogin()
+	{
+		return view('mainchat');
+	}
 
-    function logout()
-    {
-     Auth::logout();
-     return redirect('main');
-    }
+	function logout()
+	{
+		Auth::logout();
+		return redirect('main');
+	}
 }
 
 ?>
