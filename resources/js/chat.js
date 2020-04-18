@@ -1,4 +1,3 @@
-sessionStorage.clear();
 signin = function(option){
 	var asking = $('#askforsign').html();
 	switch(asking){
@@ -37,21 +36,22 @@ login = function(){
 	
 }
 
-change_balance = function(value){
+change_balance = function(qty,curr){
 	var old_balance = parseInt($('#balance').html());
-	https://www.amdoren.com/api/currency.php?api_key=Aq9g5mCabHziDdjEyMRciGdtq5qNpf&from=EUR&to=GBP&amount=50
-	var new_balance = old_balance + value;
-	$('#balance').html(new_balance);
+	var new_balance = old_balance + qty;
+	$('#balance_curr').val(curr);
+	$('#balance_qty').val(qty);
+	$('#balanceform').submit();
 }
 
 command = function(){
 	var msg = $('#textchat').val();
+	var default_balance = $('#balance').html();
+	var default_currency = $('#currency').html();
 	var msg_params = msg.split(" ");
 	var com = msg_params[0];
-	var curr = msg_params[1];
-	var qty = msg_params[2];
-	var default_balance = $('#balance').html();
-	var default_currency = $('#currency').html();	
+	var curr = typeof msg_params[2] === 'undefined' || null ? default_currency : msg_params[2];
+	var qty = msg_params[1];
 	switch(msg_params[0].toLowerCase()) {
 		case "/signin":
 		msg = "To Sign in please answer the following questions.<br>Username:"
@@ -70,11 +70,11 @@ command = function(){
 		window.location.href="main/logout";
 		break;
 		case "/deposit":
-		change_balance(parseInt(msg_params[2]*1));
+		change_balance(parseInt(qty)*1,curr);
 		$('#mensaje').html(msg_params.join(","));
 		break;
 		case "/withdraw":
-		change_balance(parseInt(msg_params[2])*-1);
+		change_balance(parseInt(qty)*-1,curr);
 		$('#mensaje').html(msg_params.join(","));
 		break;
 		case "/balance":

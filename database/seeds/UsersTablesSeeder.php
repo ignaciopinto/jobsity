@@ -16,7 +16,9 @@ class UsersTablesSeeder extends Seeder
     	User::create([
     		'name'    => 'Ignacio Pinto',
     		'email'    => 'ignacio.pinto.e@gmail.com',
-    		'password'   =>  Hash::make('password'),
+            'password'   =>  Hash::make('password'),
+            'default_currency'   =>  'CLP',
+    		'balance'   =>  '1500000',
     		'remember_token' =>  '1234567890',
     	]);
     }

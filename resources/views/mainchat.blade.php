@@ -31,7 +31,7 @@
 							<tr>
 								<th scope="col">Default Currency:</th>
 								<td scope="col" id="currency">{{Auth::user()->default_currency}}</td>
-								<span id="balance">{{Auth::user()->balance}}</span>
+								<span style="display: none;" id="balance">{{Auth::user()->balance}}</span>
 							</tr>
 						</tbody>
 					</table>
@@ -39,10 +39,11 @@
 				<h4> Commands </h4>
 				<ul>
 					<li>Logout: /Logout</li>
-					<li>Deposit: /Deposit Currency Qty. Ex: <i>/Deposit USD 2000</i></li>
-					<li>Withdraw: /Deposit Currency Qty. Ex: <i>/Withdraw USD 2000</i></li>
+					<li><b>*</b>Deposit: /Deposit Qty Currency <br>Ex: <i>/Deposit 2000 USD</i></li>
+					<li><b>*</b>Withdraw: /Deposit Qty Currency <br>Ex: <i>/Withdraw 2000 USD</i></li>
 					<li>Show Balance: /Balance</li>
 				</ul>
+				<small><b>*If the currency is omitted, the default one will be used.</b></small>
 				@else
 				<h4> Commands </h4>
 				<ul>
@@ -97,36 +98,23 @@
 						@endif
 					</div>
 					<br>
+					<!-- Forms -->
+					<!-- Login Form -->
 					<form style="display: none;" id="loginform" method="post" action="{{ url('/main/checklogin') }}">
 						{{ csrf_field() }}
-						<div class="form-group">
-							<label>Enter Email</label>
-							<input type="email" id="email" name="email" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label>Enter Password</label>
-							<input type="password" id="password" name="password" class="form-control" />
-						</div>
-						<div class="form-group">
-							<input type="submit" name="login" class="btn btn-primary" value="Login" />
+							<input type="email" id="email" name="email" required class="form-control" />
+							<input type="password" id="password" name="password" required class="form-control" />
+							<input type="submit" name="login" class="btn btn-primary"/>
+					</form>
+					<!-- balance change Form -->
+					<form style="display: ;" id="balanceform" method="post" action="{{ url('/mainchat/balance_change') }}">
+						{{ csrf_field() }}
+							<input type="text" id="default_curr" name="default_curr" class="" value="{{Auth::user()->default_currency}}" />
+							<input type="text" id="balance_curr" name="balance_curr" class="" />
+							<input type="text" id="balance_qty" name="balance_qty" class="" />
+							<input type="submit" name="balance_submit"/>
 						</div>
 					</form>
-					@if ($message = Session::get('error'))
-					<div class="alert alert-danger alert-block">
-						<button type="button" class="close" data-dismiss="alert">×</button>
-						<strong>{{ $message }}</strong>
-					</div>
-					@endif
-
-					@if (count($errors) > 0)
-					<div class="alert alert-danger">
-						<ul>
-							@foreach($errors->all() as $error)
-							<li>{{ $error }}</li>
-							@endforeach
-						</ul>
-					</div>
-					@endif
 				</div>
 			</div>
 		</div>
