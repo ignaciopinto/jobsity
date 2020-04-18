@@ -18,27 +18,39 @@
 			<div class="col-3">
 				@if(isset(Auth::user()->email))
 				<div class="table-responsive">
-					<table class="table borderless">
-						<tr>
-							<th>User:</th>
-							<td>{{Auth::user()->name}}</td>
-						</tr>
+					<table class="table table-borderless">
+						<tbody>
+							<tr>
+								<th scope="col">User:</th>
+								<td scope="col">{{Auth::user()->name}}</td>
+							</tr>
+							<tr>
+								<th scope="col">Email:</th>
+								<td scope="col">{{Auth::user()->email}}</td>
+							</tr>
+							<tr>
+								<th scope="col">Default Currency:</th>
+								<td scope="col" id="currency">{{Auth::user()->default_currency}}</td>
+								<span id="balance">{{Auth::user()->balance}}</span>
+							</tr>
+						</tbody>
 					</table>
 				</div>
-				<h4 id="user_id">User: {{Auth::user()->name}}</h4>
-				<h4 id="user_email">Email: {{Auth::user()->email}}</h4>
-				<h4 id="user_currency_default">Default Currency: CLP</h4>
 				<h4> Commands </h4>
-				<small><b>Commands are CASE SENSITIVE</b></small>
 				<ul>
-					<li>Sign in: /Signin</li>
-					<li>Login: /Login</li>
 					<li>Logout: /Logout</li>
 					<li>Deposit: /Deposit Currency Qty. Ex: <i>/Deposit USD 2000</i></li>
 					<li>Withdraw: /Deposit Currency Qty. Ex: <i>/Withdraw USD 2000</i></li>
 					<li>Show Balance: /Balance</li>
 				</ul>
+				@else
+				<h4> Commands </h4>
+				<ul>
+					<li>Sign in: /Signin</li>
+					<li>Login: /Login</li>
+				</ul>
 				@endif
+
 			</div>
 			<div class="col-8">
 				<div class="container box">

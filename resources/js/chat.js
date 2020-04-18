@@ -37,12 +37,21 @@ login = function(){
 	
 }
 
+change_balance = function(value){
+	var old_balance = parseInt($('#balance').html());
+	https://www.amdoren.com/api/currency.php?api_key=Aq9g5mCabHziDdjEyMRciGdtq5qNpf&from=EUR&to=GBP&amount=50
+	var new_balance = old_balance + value;
+	$('#balance').html(new_balance);
+}
+
 command = function(){
 	var msg = $('#textchat').val();
 	var msg_params = msg.split(" ");
 	var com = msg_params[0];
 	var curr = msg_params[1];
 	var qty = msg_params[2];
+	var default_balance = $('#balance').html();
+	var default_currency = $('#currency').html();	
 	switch(msg_params[0].toLowerCase()) {
 		case "/signin":
 		msg = "To Sign in please answer the following questions.<br>Username:"
@@ -61,13 +70,16 @@ command = function(){
 		window.location.href="main/logout";
 		break;
 		case "/deposit":
+		change_balance(parseInt(msg_params[2]*1));
 		$('#mensaje').html(msg_params.join(","));
 		break;
 		case "/withdraw":
+		change_balance(parseInt(msg_params[2])*-1);
 		$('#mensaje').html(msg_params.join(","));
 		break;
 		case "/balance":
-		$('#mensaje').html("balance");
+		msg = "Your Actual Balance is: "+default_currency+" "+default_balance
+		$('#mensaje').html(msg);
 		break;
 		default:
 		$('#mensaje').html("Comando no reconocido");
@@ -83,7 +95,4 @@ $.fn.enterKey = function (fnc) {
 			}
 		})
 	})
-}						
-$("#textchat").enterKey(function () {
-	command();
-})
+}
