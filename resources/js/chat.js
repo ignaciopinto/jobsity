@@ -70,11 +70,15 @@ command = function(){
 		window.location.href="main/logout";
 		break;
 		case "/deposit":
-		change_balance(parseInt(qty)*1,curr);
-		$('#mensaje').html(msg_params.join(","));
+		if(typeof qty!=="undefined" && qty !== null){
+			change_balance(parseFloat(qty)*1.0,curr);
+		}else{
+		$('#mensaje').html("Not enough parameters");
+
+		}
 		break;
 		case "/withdraw":
-		change_balance(parseInt(qty)*-1,curr);
+		change_balance(parseFloat(qty)*-1.0,curr);
 		$('#mensaje').html(msg_params.join(","));
 		break;
 		case "/balance":
@@ -86,6 +90,8 @@ command = function(){
 		break;
 	}
 }
+
+
 $.fn.enterKey = function (fnc) {
 	return this.each(function () {
 		$(this).keypress(function (ev) {

@@ -36,4 +36,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    static function balance_update($user_id,$qty){
+        $user = User::find($user_id);
+        $user->balance = $user->balance + $qty;
+        $user->save();
+        return $user->balance;
+    }
+
 }

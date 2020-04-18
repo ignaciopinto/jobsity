@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\Currencies;
+use App\BalanceHistories;
+use App\User;
 
 class ChatController extends Controller
 {
@@ -17,11 +19,17 @@ class ChatController extends Controller
 		$def_curr = $request->get('default_curr');
 		$in_curr = $request->get('balance_curr');
 		$qty = $request->get('balance_qty');
-
-		$this->currency_exchange($def_curr,$in_curr,$qty);
+		$user_id = $request->get('user_id');
+		$transaction = $this->currency_exchange($def_curr,$in_curr,$qty,$user_id);
+		if($transaction){
+			$msg = "Transaction Succesful. New Balance: ".$transaction." ".$def_curr;
+		}else{
+			$msg = "Error";
+		}
+		return redirect('mainchat')->with("msg",$msg);
 	}
 
-	function currency_exchange($def_curr,$in_curr,$qty){
+	function currency_exchange($def_curr,$in_curr,$qty,$user_id){
 		if(Currencies::currency_exists($def_curr) && Currencies::currency_exists($in_curr)){
 			$api_key = "Aq9g5mCabHziDdjEyMRciGdtq5qNpf";
 			$url="https://www.amdoren.com/api/currency.php?api_key=$api_key&from=$in_curr&to=$def_curr&amount=$qty";
@@ -43,12 +51,15 @@ class ChatController extends Controller
 			}
 			$error = 0;
 			if($error==0){
-				echo $amount;
+				$transaction = BalanceHistories::balance_change($user_id,$amount);
+				if($transaction){
+					$newbalance = User::balance_update($user_id,$amount);
+					return $newbalance;
+				}
 			}
 		}else{
 			echo "Currency doesnt Exists";
 		}
-		
 	}
 
 }

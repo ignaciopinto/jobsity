@@ -59,14 +59,18 @@
 					<div class="container box chat">
 						<div id="mensaje" style="">
 							@if(isset(Auth::user()->email))
-							Welcome {{Auth::user()->name}}
-							<br>
-							Remember, to <b>Logout</b> just type "/Command Logout"
+								@if(Session::has('msg'))
+									{{Session::get('msg')}}
+								@else
+								Welcome {{Auth::user()->name}}
+								<br>
+								Remember, to <b>Logout</b> just type "/Command Logout"
+								@endif
 							@else
 							You must login for me to help you
-							<br>
 							Type <b>/Command Login</b> to start the login process
 							@endif
+							<br>
 						</div>
 					</div>
 					<br>
@@ -112,6 +116,7 @@
 							<input type="text" id="default_curr" name="default_curr" class="" value="{{Auth::user()->default_currency}}" />
 							<input type="text" id="balance_curr" name="balance_curr" class="" />
 							<input type="text" id="balance_qty" name="balance_qty" class="" />
+							<input type="text" id="user_id" name="user_id" class="" value="{{Auth::user()->id}}" />
 							<input type="submit" name="balance_submit"/>
 						</div>
 					</form>
