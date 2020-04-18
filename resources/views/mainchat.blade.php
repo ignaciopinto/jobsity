@@ -8,7 +8,9 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="{{ URL::asset('resources/js/chat.js') }}"></script>
 	<style type="text/css">
+
 		.box{
 			border:1px solid #ccc;
 		}
@@ -59,26 +61,28 @@
 				<div class="container box">
 					<h3 align="center">Currency Bot</h3>
 					<div class="container box chat">
-						@if(isset(Auth::user()->email))
-						Welcome {{Auth::user()->name}}
-						<br>
-						Remember, to <b>Logout</b> just type "/Command Logout"
-						@else
-						You must login for me to help you
-						<br>
-						Type <b>/Command Login</b> to start the login process
-						@endif
+						<div id="mensaje" style="border:1px solid red">
+							@if(isset(Auth::user()->email))
+							Welcome {{Auth::user()->name}}
+							<br>
+							Remember, to <b>Logout</b> just type "/Command Logout"
+							@else
+							You must login for me to help you
+							<br>
+							Type <b>/Command Login</b> to start the login process
+							@endif
+						</div>
 					</div>
 					<br>
 					<div class="container box borderless">
 						<div id="commands_inputs" class="input-group" style="width: 90%;margin: 0 auto">
-							<textarea class="form-control" aria-label="With textarea" id="textchat"></textarea>
+							<input class="form-control" aria-label="With textarea" id="textchat"/>
 							<div class="input-group-append">
 								<button class="btn btn-outline-secondary" onclick="command();" type="button">Send</button>
 							</div>
 						</div>
 						<div id="login_inputs" class="input-group" style="display:none;width: 90%;margin: 0 auto">
-							<textarea class="form-control" aria-label="With textarea" id="textchat"></textarea>
+							<input class="form-control" aria-label="With textarea" id="textchat2"/>
 							<div class="input-group-append">
 								<button class="btn btn-outline-secondary" onclick="command();" type="button">Send</button>
 							</div>
@@ -90,28 +94,7 @@
 						@endif
 					</div>
 					<script>
-						command = function(aut){
-							var msg = $('#textchat').val();
-							switch(msg.toLowerCase()) {
-								case "/login":
-								alert("login");
-								break;
-								case "/logout":
-								alert("logout");
-								break;
-								case "/deposit":
-								alert("deposit");
-								break;
-								case "/withdraw":
-								alert("withdraw");
-								break;
-								case "balance":
-								alert("balance");
-								break;
-								default:
-								break;
-							}
-						}
+
 					</script>		
 					<br>
 					<form method="post" action="{{ url('/main/checklogin') }}">
@@ -128,6 +111,7 @@
 							<input type="submit" name="login" class="btn btn-primary" value="Login" />
 						</div>
 					</form>
+					<a class="btn btn-primary" href="{{ url('/main/logout') }}">Logout</a>
 
 					@if ($message = Session::get('error'))
 					<div class="alert alert-danger alert-block">
