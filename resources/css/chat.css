@@ -1,0 +1,16 @@
+.box{
+	border:1px solid #ccc;
+}
+.box.borderless{
+	border:0px;
+}		
+.box .chat{
+	width: 85%;
+	height: 200px;
+	overflow-y: auto;
+}
+.box.sender{
+	width: 85%;
+	height: 80px;
+	overflow-y: auto;		
+}
