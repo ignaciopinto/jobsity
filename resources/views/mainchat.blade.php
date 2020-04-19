@@ -22,7 +22,7 @@
 						<tbody>
 							<tr>
 								<th scope="col">User:</th>
-								<td scope="col">{{Auth::user()->name}}</td>
+								<td scope="col" id="username_td">{{Auth::user()->name}}</td>
 							</tr>
 							<tr>
 								<th scope="col">Email:</th>
@@ -59,16 +59,20 @@
 					<div class="container box chat">
 						<div id="mensaje" style="">
 							@if(isset(Auth::user()->email))
-								@if(Session::has('msg'))
-									{{Session::get('msg')}}
-								@else
-								Welcome {{Auth::user()->name}}
-								<br>
-								Remember, to <b>Logout</b> just type "/Command Logout"
-								@endif
+							@if(Session::has('msg'))
+							{{Session::get('msg')}}
+							@else
+							Welcome {{Auth::user()->name}}
+							<br>
+							Remember, to <b>Logout</b> just type "/logout"
+							@endif
+							@else
+							@if(Session::has('msg'))
+							{{Session::get('msg')}}
 							@else
 							You must login for me to help you
-							Type <b>/Command Login</b> to start the login process
+							Type <b>/login</b> to start the login process
+							@endif
 							@endif
 							<br>
 						</div>
@@ -103,27 +107,42 @@
 					</div>
 					<br>
 					<!-- Forms -->
-					<!-- Login Form -->
-					<form style="display: none;" id="loginform" method="post" action="{{ url('/main/checklogin') }}">
-						{{ csrf_field() }}
-							<input type="email" id="email" name="email" required class="form-control" />
-							<input type="password" id="password" name="password" required class="form-control" />
-							<input type="submit" name="login" class="btn btn-primary"/>
-					</form>
+					<!-- After login forms-->
+					@if(isset(Auth::user()->email))
 					<!-- balance change Form -->
-					<form style="display: ;" id="balanceform" method="post" action="{{ url('/mainchat/balance_change') }}">
+					<form style="display: none;" id="balanceform" method="post" action="{{ url('/mainchat/balance_change') }}">
 						{{ csrf_field() }}
-							<input type="text" id="default_curr" name="default_curr" class="" value="{{Auth::user()->default_currency}}" />
-							<input type="text" id="balance_curr" name="balance_curr" class="" />
-							<input type="text" id="balance_qty" name="balance_qty" class="" />
-							<input type="text" id="user_id" name="user_id" class="" value="{{Auth::user()->id}}" />
-							<input type="submit" name="balance_submit"/>
-						</div>
-					</form>
+						<input type="text" id="default_curr" name="default_curr" class="" value="{{Auth::user()->default_currency}}" />
+						<input type="text" id="balance_curr" name="balance_curr" class="" />
+						<input type="text" id="balance_qty" name="balance_qty" class="" />
+						<input type="text" id="user_id" name="user_id" class="" value="{{Auth::user()->id}}" />
+						<input type="submit" name="balance_submit"/>
+					</div>
+				</form>
+				@else
+				<!-- Before Login Form -->
+				<form style="display: none;" id="loginform" method="post" action="{{ url('/main/checklogin') }}">
+					{{ csrf_field() }}
+					<input type="email" id="email" name="email" required class="form-control" />
+					<input type="password" id="password" name="password" required class="form-control" />
+					<input type="submit" name="login" class="btn btn-primary"/>
+				</form>
+				<!-- SIgin form -->
+				<form style="display: ;" id="signin_form" method="post" action="{{ url('/mainchat/signin') }}">
+					{{ csrf_field() }}
+					<input type="text" id="sign_currency" name="sign_currency" class="" />
+					<input type="text" id="sign_balance" name="sign_balance" class="" />
+					<input type="text" id="sign_username" name="sign_username" class="" />
+					<input type="email" id="sign_email" name="sign_email" class="" />
+					<input type="password" id="sign_password" name="sign_password" class="" />
+					<input type="submit" name="signin_submit"/>
 				</div>
-			</div>
+			</form>
+			@endif
 		</div>
 	</div>
-	<script src="{{ URL::asset('../resources/js/chat.js') }}"></script>
+</div>
+</div>
+<script src="{{ URL::asset('../resources/js/chat.js') }}"></script>
 </body>
 </html>

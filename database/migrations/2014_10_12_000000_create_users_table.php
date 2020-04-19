@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('default_currency');
-            $table->float('balance');
+            $table->float('balance', 100, 3);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

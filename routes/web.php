@@ -27,3 +27,4 @@ Route::get('main/logout', 'AuthController@logout');
 /* Chat */
 Route::get('/mainchat', 'ChatController@index');
 Route::post('/mainchat/balance_change', 'ChatController@balance_change');
+Route::post('/mainchat/signin', 'ChatController@signin');

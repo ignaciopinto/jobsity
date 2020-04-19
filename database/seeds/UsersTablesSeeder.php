@@ -18,8 +18,7 @@ class UsersTablesSeeder extends Seeder
     		'email'    => 'ignacio.pinto.e@gmail.com',
             'password'   =>  Hash::make('password'),
             'default_currency'   =>  'CLP',
-    		'balance'   =>  '1500000',
-    		'remember_token' =>  '1234567890',
+    		'balance'   =>  '1500000'
     	]);
     }
 }

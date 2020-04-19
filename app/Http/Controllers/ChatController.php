@@ -62,4 +62,24 @@ class ChatController extends Controller
 		}
 	}
 
+	function signin(Request $request){
+		$currency = $request->get('sign_currency');
+		$user = $request->get('sign_username');
+		$email = $request->get('sign_email');
+		$msg = "Ok";
+		if(!Currencies::currency_exists($currency)){
+			$msg = "Currency is not a valid one.";
+			return redirect('mainchat')->with("msg",$msg);
+		}
+		if(User::user_exists($user,$email)){
+			$msg = "<b>Username</b> or <b>E-Mail</b> already exists.";
+			return redirect('mainchat')->with("msg",$msg);
+		}
+		if(User::signin($request)){
+			$msg = "Signin Succesful. Type /login to login.";
+			return redirect('mainchat')->with("msg",$msg);
+		}
+
+	}
+
 }

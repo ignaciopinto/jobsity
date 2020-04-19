@@ -1,16 +1,35 @@
-signin = function(option){
-	var asking = $('#askforsign').html();
-	switch(asking){
-		case "username":
-		break;
-		case "password":
-		break;
-		case "email":
-		break;
-		case "currency":
-		break;
-		case "balance":
-		break;
+var signin_options = ["Username","Password","Email","Currency","Balance"];
+
+function camelize(str) {
+	return str.split(' ').map(function(word,index){
+    // If it is the first word make sure to lowercase all the chars.
+    if(index == 0){
+    	return word.toLowerCase();
+    }
+    // If it is not the first word only upper case the first char and lowercase the rest.
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}).join('');
+}
+
+signin = function(){
+	var asking = sessionStorage.getItem("signin_option");
+	var	answer = $('#signinput').val();
+	$('#sign_'+asking.toLowerCase()).val(answer);
+	var index =  signin_options.indexOf(asking);
+	if(index == 1){
+		answer = "<i>(Secret)</i>";
+	}
+	$('#mensaje').append(" "+answer);
+	$('#signinput').val("");
+	sessionStorage.setItem("signin_option", signin_options[index+1]);	
+	if(typeof signin_options[index+1] === "undefined"){
+		$('#signin_form').submit();
+	}else{
+		$('#signinput').attr("type","text");
+		if(index+1 == 1){
+			$('#signinput').attr("type","password");
+		}
+		$('#mensaje').append("<br>"+signin_options[index+1]+": ");
 	}
 }
 
@@ -52,38 +71,67 @@ command = function(){
 	var com = msg_params[0];
 	var curr = typeof msg_params[2] === 'undefined' || null ? default_currency : msg_params[2];
 	var qty = msg_params[1];
+	var uname = $('#username_td').html();
 	switch(msg_params[0].toLowerCase()) {
 		case "/signin":
-		msg = "To Sign in please answer the following questions.<br>Username:"
-		$('#commands_inputs').hide();
-		$('#signin_inputs').show();
-		$('#askforsign').html("username");
-		$('#mensaje').html(msg);
+		sessionStorage.clear();
+		if(typeof uname === "undefined"){
+			msg = "To Sign in please answer the following questions.<br>"+signin_options[0]+":"
+
+			sessionStorage.setItem("signin_option", signin_options[0]);
+			$('#commands_inputs').hide();
+			$('#signin_inputs').show();
+			$('#mensaje').html(msg);
+		}else{
+			msg = "You can't sign in when already logged in, logout first."
+			$('#mensaje').html(msg);
+		}
 		break;
 		case "/login":
-		msg = "What is your e-mail?";
-		$('#commandbtn').hide();
-		$('#loginbtn').show();
-		$('#mensaje').html(msg);
+		if(typeof uname === "undefined"){
+			msg = "What is your e-mail?";
+			$('#textchat').val("");
+			$('#commandbtn').hide();
+			$('#loginbtn').show();
+			$('#mensaje').html(msg);
+		}else{
+			msg = "You are Already Logged in."
+			$('#mensaje').html(msg);
+		}
 		break;
 		case "/logout":
 		window.location.href="main/logout";
 		break;
 		case "/deposit":
-		if(typeof qty!=="undefined" && qty !== null){
-			change_balance(parseFloat(qty)*1.0,curr);
-		}else{
-		$('#mensaje').html("Not enough parameters");
+		if(typeof uname !== "undefined"){
+			if(typeof qty!=="undefined" && qty !== null){
+				change_balance(parseFloat(qty)*1.0,curr);
+			}else{
+				$('#mensaje').html("Not enough parameters");
 
+			}
+		}else{
+			msg ="Sorry I can't help you<br>You must login into an account to make a deposit<br>Type /login to login.";
+			$('#mensaje').html(msg);
 		}
 		break;
 		case "/withdraw":
-		change_balance(parseFloat(qty)*-1.0,curr);
-		$('#mensaje').html(msg_params.join(","));
+		if(typeof uname !== "undefined"){
+			change_balance(parseFloat(qty)*-1.0,curr);
+			$('#mensaje').html(msg_params.join(","));
+		}else{
+			msg ="Sorry I can't help you<br>You must login into an account to make a withdraw<br>Type /login to login.";
+			$('#mensaje').html(msg);
+		}
 		break;
 		case "/balance":
-		msg = "Your Actual Balance is: "+default_currency+" "+default_balance
-		$('#mensaje').html(msg);
+		if(typeof uname !== "undefined"){
+			msg = "Your Actual Balance is: "+default_currency+" "+default_balance
+			$('#mensaje').html(msg);
+		}else{
+			msg ="Sorry I can't help you<br>You must login into an account to check your balance<br>Type /login to login.";
+			$('#mensaje').html(msg);
+		}
 		break;
 		default:
 		$('#mensaje').html("Comando no reconocido");
