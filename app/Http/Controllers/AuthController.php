@@ -15,11 +15,6 @@ class AuthController extends Controller
 
 	function checklogin(Request $request)
 	{
-		$this->validate($request, [
-			'email'   => 'required|email',
-			'password'  => 'required|alphaNum|min:3'
-		]);
-
 		$user_data = array(
 			'email'  => $request->get('email'),
 			'password' => $request->get('password')
@@ -31,7 +26,7 @@ class AuthController extends Controller
 		}
 		else
 		{
-			return back()->with('error', 'Wrong Login Details');
+			return back()->with('error', 'I couldn\'t find your username or password, please try again.');
 		}
 
 	}

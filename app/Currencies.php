@@ -20,5 +20,14 @@ class Currencies extends Model
     	return Currencies::where('value',strtoupper($currency))->exists();
     }
 
+    static function list(){
+        $list = Currencies::select("name","value")->get();
+        $arr_list = [];
+        foreach($arr_list as $elem){
+            $arr_list[] = [$elem->name,$elem->value];
+        }
+        return $arr_list;
+    }
+
 
 }

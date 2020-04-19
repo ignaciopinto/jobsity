@@ -59,20 +59,23 @@
 					<div class="container box chat">
 						<div id="mensaje" style="">
 							@if(isset(Auth::user()->email))
-							@if(Session::has('msg'))
-							{{Session::get('msg')}}
+								@if(Session::has('msg'))
+									{{Session::get('msg')}}
+								@else
+									Welcome {{Auth::user()->name}}
+									<br>
+									Remember, to <b>Logout</b> just type "/logout"
+								@endif
 							@else
-							Welcome {{Auth::user()->name}}
-							<br>
-							Remember, to <b>Logout</b> just type "/logout"
-							@endif
-							@else
-							@if(Session::has('msg'))
-							{{Session::get('msg')}}
-							@else
-							You must login for me to help you
-							Type <b>/login</b> to start the login process
-							@endif
+								@if(Session::has('msg'))
+									{{Session::get('msg')}}
+								@else
+									@if(Session::has('error'))
+									{{Session::get('error')}}<br>
+									@endif
+									You must login for me to help you
+									Type <b>/login</b> to start the login process
+								@endif
 							@endif
 							<br>
 						</div>
@@ -83,27 +86,8 @@
 							<input class="form-control" aria-label="With textarea" id="textchat"/>
 							<div class="input-group-append">
 								<button class="btn btn-outline-secondary" id="commandbtn" onclick="command();" type="button">Send</button>
-								<button style="display: none;" id="loginbtn" class="btn btn-outline-secondary" onclick="login();" type="button">Senda</button>
 							</div>
 						</div>
-						<div id="signin_inputs" class="input-group" style="display:none;width: 90%;margin: 0 auto">
-							<span id="askforsign" style=""></span>
-							<input class="form-control" aria-label="With textarea" id="signinput"/>
-							<div class="input-group-append">
-								<button class="btn btn-outline-secondary" onclick="signin();" type="button">Send</button>
-							</div>
-						</div>
-						<div id="login_inputs" class="input-group" style="display:none;width: 90%;margin: 0 auto">
-							<input class="form-control" aria-label="With textarea" id="textchat2"/>
-							<div class="input-group-append">
-								<button class="btn btn-outline-secondary" onclick="command();" type="button">Send</button>
-							</div>
-						</div>		
-						@if(isset(Auth::user()->email))
-
-						@else
-
-						@endif
 					</div>
 					<br>
 					<!-- Forms -->
