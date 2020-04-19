@@ -14,3 +14,12 @@
 	height: 80px;
 	overflow-y: auto;		
 }
+.chatmessage{
+	margin-top: 5px
+}
+.chatmessage.left{
+	text-align: left; background-color: rgba(236,229,221,0.5);
+}
+.chatmessage.right{
+	text-align: right; background-color: rgba(220,248,198,0.5);
+}

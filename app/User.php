@@ -39,9 +39,15 @@ class User extends Authenticatable
 
     static function balance_update($user_id,$qty){
         $user = User::find($user_id);
-        $user->balance = $user->balance + $qty;
-        $user->save();
-        return $user->balance;
+        $newbalance = $user->balance + $qty;
+        if($newbalance < 0){
+            return -1;
+        }else{
+            $user->balance = $newbalance;
+            $user->save();
+            return $user->balance; 
+        }
+
     }
 
     static function user_exists($username,$email){

@@ -6,9 +6,9 @@ signin = function() {
 	$('#sign_' + asking.toLowerCase()).val(answer);
 	var index = signin_options.indexOf(asking);
 	if (index == 1) {
-		answer = "<i>(Secret)</i>";
+		answer = "<i>(I'll keep it a secret)</i>";
 	}
-	$('#mensaje').append(" " + answer);
+	post_message(1, answer);
 	$('#textchat').val("");
 	sessionStorage.setItem("signin_option", signin_options[index + 1]);
 	if (typeof signin_options[index + 1] === "undefined") {
@@ -18,7 +18,8 @@ signin = function() {
 		if (index + 1 == 1) {
 			$('#textchat').attr("type", "password");
 		}
-		$('#mensaje').append("<br>" + signin_options[index + 1] + ": ");
+		var question = "and your "+signin_options[index + 1]+"?";
+		post_message(0, question);
 	}
 }
 
@@ -26,16 +27,17 @@ login = function() {
 	var txt = $('#textchat').val();
 	email = sessionStorage.getItem("email");
 	if (email !== "1") {
+		post_message(1, txt);
 		sessionStorage.setItem("email", "1");
 		$('#email').val(txt);
-		msg = "<br>What is your password?";
-		$('#mensaje').append(msg);
+		msg = "What is your password?";
+		post_message(0, msg);
 		$('#textchat').val("");
 		$('#textchat').attr("type", "password");
 		$('#textchat').prop("onkeyup", "").off("keyup");
 	} else {
 		msg = "Login to account";
-		$('#mensaje').html(msg);
+		post_message(0, msg);
 		$('#password').val(txt);
 		$('#textchat').val("");
 		$('#textchat').attr("type", "text");
@@ -44,6 +46,20 @@ login = function() {
 	}
 
 }
+
+post_message = function(id, message) {
+	var chatbox = $('#mensaje').html();
+	var div = '<div class="chatmessage ';
+	if (id !== 0) {
+		div += 'right';
+	} else {
+		div += 'left';
+	}
+	div += '">' + message + '</div>';
+	$('#mensaje').append(div);
+	$('.box.chat').scrollTop($('.box.chat')[0].scrollHeight);
+}
+
 
 change_balance = function(qty, curr) {
 	var old_balance = parseInt($('#balance').html());
@@ -55,6 +71,7 @@ change_balance = function(qty, curr) {
 
 command = function() {
 	var msg = $('#textchat').val();
+	post_message(1, msg);
 	var default_balance = $('#balance').html();
 	var default_currency = $('#currency').html();
 	var msg_params = msg.split(" ");
@@ -65,28 +82,25 @@ command = function() {
 	switch (msg_params[0].toLowerCase()) {
 		case "/signin":
 		sessionStorage.clear();
+		$('#textchat').val("");
 		if (typeof uname === "undefined") {
-			msg = "To Sign in please answer the following questions.<br>" + signin_options[0] + ":"
+			msg = "To Sign in please answer the following questions.<br>What will be your " + signin_options[0] + "?"
 			sessionStorage.setItem("signin_option", signin_options[0]);
-			$('#commandbtn').attr("onclick","signin();");
-			$('#mensaje').html(msg);
+			$('#commandbtn').attr("onclick", "signin();");
 		} else {
 			msg = "You can't sign in when already logged in, logout first."
-			$('#mensaje').html(msg);
 		}
 		break;
 		case "/login":
 		if (typeof uname === "undefined") {
 			msg = "What is your e-mail?";
-			$('#commandbtn').attr("onclick","login();");
+			$('#commandbtn').attr("onclick", "login();");
 			$('#commandbtn').prop('disabled', true);
 			$('#textchat').val("");
 			$('#textchat').attr("onkeyup", "email_form()");
-			$('#mensaje').html(msg);
 		} else {
 			$('#textchat').attr("type", "text");
 			msg = "You are Already Logged in."
-			$('#mensaje').html(msg);
 		}
 		break;
 		case "/logout":
@@ -96,45 +110,42 @@ command = function() {
 		if (typeof uname !== "undefined") {
 			if (typeof qty !== "undefined" && qty !== null) {
 				change_balance(parseFloat(qty) * 1.0, curr);
+				msg = "Prossesing Deposit<br>The chat will be cleaned for safety";
 			} else {
-				$('#mensaje').html("I can't help you, you didn't give me enough parameters for /deposit.<br> Remember the command is /deposit quantity currency<br>Ex: /deposit 2000 USD.<br>Try Again.");
-
+				msg = "I can't help you, you didn't give me enough parameters for /deposit.<br> Remember the command is /deposit quantity currency<br>Ex: /deposit 2000 USD.<br>Try Again.";
 			}
 		} else {
 			msg = "Sorry I can't help you<br>You must login into an account to make a deposit<br>Type /login to login.";
-			$('#mensaje').html(msg);
 		}
 		break;
 		case "/withdraw":
 		if (typeof uname !== "undefined") {
 			change_balance(parseFloat(qty) * -1.0, curr);
-			$('#mensaje').html(msg_params.join(","));
+			msg = "Prossesing Withdraw<br>The chat will be cleaned for safety";
 		} else {
 			msg = "Sorry I can't help you<br>You must login into an account to make a withdraw<br>Type /login to login.";
-			$('#mensaje').html(msg);
 		}
 		break;
 		case "/balance":
 		if (typeof uname !== "undefined") {
 			msg = "Your Actual Balance is: " + default_currency + " " + default_balance
-			$('#mensaje').html(msg);
 		} else {
 			msg = "Sorry I can't help you<br>You must login into an account to check your balance<br>Type /login to login.";
-			$('#mensaje').html(msg);
 		}
 		break;
 		default:
-		$('#mensaje').html("Comando no reconocido");
+		msg = "I'm sorry I don not understand <br>	"+msg_params[0];
 		break;
 	}
+	post_message(0, msg);
 }
 
-email_form = function(){
+email_form = function() {
 	var email = $('#textchat').val();
 	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	if(re.test(String(email).toLowerCase())){
+	if (re.test(String(email).toLowerCase())) {
 		$('#commandbtn').prop('disabled', false);
-	}else{
+	} else {
 		$('#commandbtn').prop('disabled', true);
 	}
 }
@@ -150,10 +161,14 @@ $.fn.enterKey = function(fnc) {
 		})
 	})
 }
-$('#textchat').enterKey(function(){
+$('#textchat').enterKey(function() {
 	$('#commandbtn').click();
 });
 
-$(function(){
-    document.getElementById('textchat').focus();
+$(function() {
+	document.getElementById('textchat').focus();
+	var uname = $('#username_td').html();
+	if (typeof uname === "undefined") {
+
+	}
 });

@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use App\Currencies;
 use App\BalanceHistories;
 use App\User;
+use App\ChatHistory;
 
 class ChatController extends Controller
 {
 	function index()
-	{
+	{	
+		$chat = ChatHistory::get_chat(1);
+		if($chat->count()){
+			// return view('mainchat',["chat"=>$chat]);
+		}
 		return view('mainchat');
 	}
 
@@ -21,10 +26,16 @@ class ChatController extends Controller
 		$qty = $request->get('balance_qty');
 		$user_id = $request->get('user_id');
 		$transaction = $this->currency_exchange($def_curr,$in_curr,$qty,$user_id);
-		if($transaction){
-			$msg = "Transaction Succesful. New Balance: ".$transaction." ".$def_curr;
+		if($transaction>0){
+			$msg = "The transaction was a success. To check your new balance type /balance";
 		}else{
-			$msg = "Error";
+			$msg = "I'm sorry but the transaction failed";
+			if($transaction === -1){
+				$msg .= " your account doesn't have enougth for the withdraw";
+			}else{
+				$msg .= " an error happened during the transaction. Try again please";
+			}
+			
 		}
 		return redirect('mainchat')->with("msg",$msg);
 	}
@@ -58,7 +69,7 @@ class ChatController extends Controller
 				}
 			}
 		}else{
-			echo "Currency doesnt Exists";
+			return "Currency doesnt Exists";
 		}
 	}
 

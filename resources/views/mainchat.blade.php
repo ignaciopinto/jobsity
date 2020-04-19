@@ -60,7 +60,7 @@
 						<div id="mensaje" style="">
 							@if(isset(Auth::user()->email))
 								@if(Session::has('msg'))
-									{{Session::get('msg')}}
+									<div class="chatmessage left">{{Session::get('msg')}}</div>
 								@else
 									Welcome {{Auth::user()->name}}
 									<br>
@@ -112,7 +112,7 @@
 					<input type="submit" name="login" class="btn btn-primary"/>
 				</form>
 				<!-- SIgin form -->
-				<form style="display: ;" id="signin_form" method="post" action="{{ url('/mainchat/signin') }}">
+				<form style="display: none;" id="signin_form" method="post" action="{{ url('/mainchat/signin') }}">
 					{{ csrf_field() }}
 					<input type="text" id="sign_currency" name="sign_currency" class="" />
 					<input type="text" id="sign_balance" name="sign_balance" class="" />
