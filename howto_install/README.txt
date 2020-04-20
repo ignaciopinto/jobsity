@@ -21,6 +21,10 @@ composer global require laravel/installer
 # master branch of: 
 https://github.com/ignaciopinto/jobsity
 
+# Or use the git command, in the base directory of the web.server
+
+git clone https://github.com/ignaciopinto/jobsity.git
+
 # Edit the file .env in the following sections to the ones you need for.
 # The system was tested with MariaDB/MySql.
 
