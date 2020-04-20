@@ -1,5 +1,9 @@
 var signin_options = ["Username", "Password", "Email", "Currency", "Balance"];
 
+function formatNumber(num) {
+  return num.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+
 signin = function() {
 	var asking = sessionStorage.getItem("signin_option");
 	var answer = $('#textchat').val();
@@ -127,7 +131,7 @@ command = function() {
 		break;
 		case "/balance":
 		if (typeof uname !== "undefined") {
-			msg = "Your Actual Balance is: " + default_currency + " " + default_balance
+			msg = "Your Actual Balance is: " + default_currency + " " + formatNumber(parseFloat(default_balance));
 		} else {
 			msg = "Sorry I can't help you<br>You must login into an account to check your balance<br>Type /login to login.";
 		}

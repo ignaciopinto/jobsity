@@ -26,7 +26,7 @@ class AuthController extends Controller
 		}
 		else
 		{
-			return back()->with('error', 'I couldn\'t find your username or password, please try again.');
+			return back()->with('error', 'I couldn\'t find your E-Mail or Password, please try again.');
 		}
 
 	}

@@ -11,8 +11,8 @@ class SignInTest extends TestCase
      *
      * @return void
      */
-    public function SignTest()
+    public function testSignin()
     {
-        $this->assertTrue(true);
+    	return $this->assertTrue(true);
     }
 }
