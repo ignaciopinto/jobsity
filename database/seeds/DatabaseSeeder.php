@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         Eloquent::unguard();
         $this->call(UsersTablesSeeder::class);
         $this->call(CurrenciesTablesSeeder::class);
+        $this->call(CurrenciesApiKeyTablesSeeder::class);
     }
 }

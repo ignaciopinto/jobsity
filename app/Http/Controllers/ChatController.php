@@ -8,6 +8,7 @@ use App\Currencies;
 use App\BalanceHistories;
 use App\User;
 use App\ChatHistory;
+use App\CurrencyApiKey;
 
 class ChatController extends Controller
 {
@@ -32,6 +33,7 @@ class ChatController extends Controller
 		$qty = $request->get('balance_qty');
 		$user_id = $request->get('user_id');
 		$transaction = $this->currency_exchange($def_curr,$in_curr,$qty,$user_id);
+		return;
 		if($transaction>0){
 			$msg = "The transaction was a success. To check your new balance type /balance";
 		}else{
@@ -43,25 +45,28 @@ class ChatController extends Controller
 			}
 			
 		}
-		return redirect('mainchat')->with("msg",$msg);
+		// return redirect('mainchat')->with("msg",$msg);
 	}
 
 	function force_exchange($def_curr,$in_curr,$qty){
-		return ($qty/($this->rates[$in_curr]))*($this->rates[$def_curr]);
+		return ($qty/($this->rates[strtoupper($in_curr)]))*($this->rates[strtoupper($def_curr)]);
 	}
 
 
 	function fixerio($def_curr,$in_curr,$qty){
 		// set API Endpoint, access key, required parameters
 		$endpoint = 'convert';
-		$access_key = '8ae7671a42590a94bd92491d90c138e2';
+
+		$key = CurrencyApiKey::get_key('fixer.io');
+		$access_key = $key->api_key;
 
 		$from = strtoupper($in_curr);
 		$to = strtoupper($def_curr);
 		$amount = $qty;
 
 		// initialize CURL:
-		$ch = curl_init('http://data.fixer.io/api/'.$endpoint.'?access_key='.$access_key.'&from='.$from.'&to='.$to.'&amount='.$amount.'');   
+		$url='http://data.fixer.io/api/'.$endpoint.'?access_key='.$access_key.'&from='.$from.'&to='.$to.'&amount='.$amount.'';
+		$ch = curl_init($url);   
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 		// get the JSON data:
@@ -76,7 +81,8 @@ class ChatController extends Controller
 	}
 
 	function amdoren($def_curr,$in_curr,$qty){
-		$api_key = "Aq9g5mCabHziDdjEyMRciGdtq5qNpf";
+		$key = CurrencyApiKey::get_key('amdoren.com');
+		$api_key = $key->api_key;
 		$url="https://www.amdoren.com/api/currency.php?api_key=$api_key&from=$in_curr&to=$def_curr&amount=$qty";
 		$ch = curl_init();  
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -85,9 +91,6 @@ class ChatController extends Controller
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$json_string = curl_exec($ch);
 		$parsed_json = json_decode($json_string);
-		$error = $parsed_json->error;
-		$error_message = $parsed_json->error_message;
-		$amount = $parsed_json->amount;
 		return $parsed_json;
 	}
 	function currency_exchange($def_curr,$in_curr,$qty,$user_id){
