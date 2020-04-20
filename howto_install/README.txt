@@ -55,6 +55,6 @@ php artisan db:seed
 # default currency: CLP
 # and all the standar currency codes.
 # And the api_key for the Currency Converter APIs.
-# If you need to change them. go to your database, table "currency_api_keys", and change them.
+# If you need to change them. go to your database, table "currency_api_keys", and change the "api_key" value in them.
 
 #In case you can't use the migration/seeder commands. run the import the "jobsity.sql" file into your database, it's a MYSQL file.
