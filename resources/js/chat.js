@@ -96,7 +96,6 @@ command = function() {
 			msg = "What is your e-mail?";
 			$('#commandbtn').attr("onclick", "login();");
 			$('#commandbtn').prop('disabled', true);
-			$('#textchat').val("");
 			$('#textchat').attr("onkeyup", "email_form()");
 		} else {
 			$('#textchat').attr("type", "text");
@@ -134,9 +133,10 @@ command = function() {
 		}
 		break;
 		default:
-		msg = "I'm sorry I don not understand <br>	"+msg_params[0];
+		msg = "I'm sorry I don not understand the command <br>	'"+msg_params[0]+"'";
 		break;
 	}
+	$('#textchat').val("");
 	post_message(0, msg);
 }
 

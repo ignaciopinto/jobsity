@@ -33,7 +33,7 @@ class ChatController extends Controller
 			if($transaction === -1){
 				$msg .= " your account doesn't have enougth for the withdraw";
 			}else{
-				$msg .= " an error happened during the transaction. Try again please";
+				$msg .= " an error happened during the transaction. Try again please.<br>The problem with the transaction was: \n".$transaction;
 			}
 			
 		}

@@ -60,7 +60,7 @@
 						<div id="mensaje" style="">
 							@if(isset(Auth::user()->email))
 								@if(Session::has('msg'))
-									<div class="chatmessage left">{{Session::get('msg')}}</div>
+									<div class="chatmessage left">{!!Session::get('msg')!!}</div>
 								@else
 									Welcome {{Auth::user()->name}}
 									<br>
@@ -68,7 +68,7 @@
 								@endif
 							@else
 								@if(Session::has('msg'))
-									{{Session::get('msg')}}
+									{{Session::get('msg')}}a
 								@else
 									@if(Session::has('error'))
 									{{Session::get('error')}}<br>
