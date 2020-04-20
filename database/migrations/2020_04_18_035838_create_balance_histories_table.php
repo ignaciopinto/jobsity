@@ -17,6 +17,7 @@ class CreateBalanceHistoriesTable extends Migration
             $table->id();
             $table->foreignId('users_id')->constrained();
             $table->float('balance_change');
+            $table->boolean("is_valid_transaction")->default(false);
             $table->timestamps();
         });
     }

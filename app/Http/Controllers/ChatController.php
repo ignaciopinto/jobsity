@@ -33,8 +33,7 @@ class ChatController extends Controller
 		$qty = $request->get('balance_qty');
 		$user_id = $request->get('user_id');
 		$transaction = $this->currency_exchange($def_curr,$in_curr,$qty,$user_id);
-		return;
-		if($transaction>0){
+		if($transaction>=0){
 			$msg = "The transaction was a success. To check your new balance type /balance";
 		}else{
 			$msg = "I'm sorry but the transaction failed";
@@ -45,7 +44,7 @@ class ChatController extends Controller
 			}
 			
 		}
-		// return redirect('mainchat')->with("msg",$msg);
+		return redirect('mainchat')->with("msg",$msg);
 	}
 
 	function force_exchange($def_curr,$in_curr,$qty){
@@ -114,8 +113,11 @@ class ChatController extends Controller
 			
 			if($error==0){
 				$transaction = BalanceHistories::balance_change($user_id,$amount);
-				if($transaction){
+				if($transaction>=0){
 					$newbalance = User::balance_update($user_id,$amount);
+					if($newbalance>=0){
+						BalanceHistories::is_valid($transaction);
+					}
 					return $newbalance;
 				}
 			}
@@ -130,15 +132,15 @@ class ChatController extends Controller
 		$email = $request->get('sign_email');
 		$msg = "Ok";
 		if(!Currencies::currency_exists($currency)){
-			$msg = "Currency is not a valid one.";
+			$msg = "I'm sorry, looks like the currency you want to set as your default one is not a valid one.<br>Try to sign in again.";
 			return redirect('mainchat')->with("msg",$msg);
 		}
 		if(User::user_exists($user,$email)){
-			$msg = "<b>Username</b> or <b>E-Mail</b> already exists.";
+			$msg = "I'm sorry looks like the <b>Username</b> or the <b>E-Mail</b> already exists. Try with another one.";
 			return redirect('mainchat')->with("msg",$msg);
 		}
 		if(User::signin($request)){
-			$msg = "Signin Succesful. Type /login to login.";
+			$msg = "Congratulations!!.<br> The sign in process was succesful. <br>Remember to type /login to login.";
 			return redirect('mainchat')->with("msg",$msg);
 		}
 

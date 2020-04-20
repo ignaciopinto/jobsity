@@ -39,8 +39,8 @@
 				<h4> Commands </h4>
 				<ul>
 					<li>Logout: /Logout</li>
-					<li><b>*</b>Deposit: /Deposit Qty Currency <br>Ex: <i>/Deposit 2000 USD</i></li>
-					<li><b>*</b>Withdraw: /Deposit Qty Currency <br>Ex: <i>/Withdraw 2000 USD</i></li>
+					<li><b>*</b>Deposit: /Deposit Qty Currency Code <br>Ex: <i>/Deposit 2000 USD</i></li>
+					<li><b>*</b>Withdraw: /Deposit Qty Currency Code <br>Ex: <i>/Withdraw 2000 USD</i></li>
 					<li>Show Balance: /Balance</li>
 				</ul>
 				<small><b>*If the currency is omitted, the default one will be used.</b></small>
@@ -58,26 +58,28 @@
 					<h3 align="center">Currency Bot</h3>
 					<div class="container box chat">
 						<div id="mensaje" style="">
-							@if(isset(Auth::user()->email))
+							<div class="chatmessage left">
+								@if(isset(Auth::user()->email))
 								@if(Session::has('msg'))
-									<div class="chatmessage left">{!!Session::get('msg')!!}</div>
+								{!!Session::get('msg')!!}
 								@else
-									Welcome {{Auth::user()->name}}
-									<br>
-									Remember, to <b>Logout</b> just type "/logout"
+								Welcome {{Auth::user()->name}}
+								<br>
+								Remember, to <b>Logout</b> just type "/logout"
 								@endif
-							@else
+								@else
 								@if(Session::has('msg'))
-									{{Session::get('msg')}}a
+								{!!Session::get('msg')!!}
 								@else
-									@if(Session::has('error'))
-									{{Session::get('error')}}<br>
-									@endif
-									You must login for me to help you
-									Type <b>/login</b> to start the login process
+								@if(Session::has('error'))
+								{{Session::get('error')}}<br>
 								@endif
-							@endif
-							<br>
+								You must login for me to help you
+								Type <b>/login</b> to start the login process
+								@endif
+								@endif
+								<br>
+							</div>
 						</div>
 					</div>
 					<br>

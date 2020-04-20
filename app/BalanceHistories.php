@@ -16,4 +16,15 @@ class BalanceHistories extends Model
 		return $balance->id;
 	}
 
+	static function is_valid($balance_id){
+		$balance = BalanceHistories::find($balance_id);
+		$balance->is_valid_transaction = true;
+		$balance->save();
+	}
+
+	static function show_history($user_id){
+		$balance = BalanceHistories::where("user_id","=",$user_id)->get();
+		return $balance;
+	}
+
 }
